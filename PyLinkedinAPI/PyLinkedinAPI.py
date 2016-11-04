@@ -62,16 +62,14 @@ class PyLinkedinAPI():
         return json.dumps(data)
 
     def __build_url_get_basic_profile(self):
-        url = '{url}people/~?oauth2_access_token={access_token}&\
-                                            format={format}'.format(
+        url = '{url}people/~?oauth2_access_token={access_token}&format={format}'.format(
             url=self.BASE_URI_API,
             access_token=self.access_token,
             format=self.default_format)
         return url
 
     def __build_url_get_companies(self):
-        uri = '{url}{resource}?oauth2_access_token={access_token}&format=json&\
-                                                is-company-admin=true'.format(
+        uri = '{url}{resource}?oauth2_access_token={access_token}&format=json&is-company-admin=true'.format(
             url=self.BASE_URI_API,
             resource="companies:(id,name,logo-url,company-type)",
             access_token=self.access_token)
@@ -79,8 +77,7 @@ class PyLinkedinAPI():
         return uri
 
     def __build_url_publish_profile(self):
-        uri = '{url}{resource}?oauth2_access_token={access_token}&\
-                                                format=json'.format(
+        uri = '{url}{resource}?oauth2_access_token={access_token}&format=json'.format(
             url=self.BASE_URI_API,
             resource='people/~/shares',
             access_token=self.access_token)
@@ -90,8 +87,7 @@ class PyLinkedinAPI():
     def __build_url_publish_company(self, id):
         resource = 'companies/{}/shares'.format(id)
 
-        uri = '{url}{resource}?oauth2_access_token={access_token}&\
-                                                format=json'.format(
+        uri = '{url}{resource}?oauth2_access_token={access_token}&format=json'.format(
             url=self.BASE_URI_API,
             resource=resource,
             access_token=self.access_token)
@@ -99,6 +95,28 @@ class PyLinkedinAPI():
         return uri
 
     def __build_url_get_profile(self, fields):
+
+        uri = '{url}{resource}~:({fields})?oauth2_access_token={access_token}&format=json'.format(
+            url=self.BASE_URI_API,
+            resource='people/',
+            fields=','.join(fields),
+            access_token=self.access_token)
+
+        print(uri)
+        # https://api.linkedin.com/v1/people/~:(id,email-address)?oauth2_access_token=AQUvktS4TfVV7YTq3bNTp9TEuAL5F9hbo3ld9MM_O65L1kz6B8frCUOvSfo3DeftJdxLj1YwbU-LMpGYN9sc8AdXDXWseX3QaKV-WC3LspMYhFojq3FA55VkRZ54oHEPnZQm-dNhMt-jBKu3zcIkCWMRuOAeb-HpUF_QR_kz4ffB18Ep9Ic&format=json
+        return uri
+
+    def __build_url_get_update_likes(self, fields):
+
+        uri = '{url}{resource}~:({fields})?oauth2_access_token={access_token}&format=json'.format(
+            url=self.BASE_URI_API,
+            resource='people/',
+            fields=','.join(fields),
+            access_token=self.access_token)
+
+        return uri
+
+    def __build_url_get_update_comments(self, fields):
 
         uri = '{url}{resource}~:({fields})?oauth2_access_token={access_token}&format=json'.format(
             url=self.BASE_URI_API,
@@ -138,6 +156,16 @@ class PyLinkedinAPI():
         return content
 
     def get_profile(self, fields):
+        url = self.__build_url_get_profile(fields)
+        content = self.__execute_request_get(url)
+        return content
+
+    def get_update_likes(self, fields):
+        url = self.__build_url_get_profile(fields)
+        content = self.__execute_request_get(url)
+        return content
+
+    def get_update_comments(self, fields):
         url = self.__build_url_get_profile(fields)
         content = self.__execute_request_get(url)
         return content
